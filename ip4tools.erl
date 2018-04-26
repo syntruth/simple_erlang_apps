@@ -54,20 +54,20 @@ make_ip_string(Current, [H|T]) ->
 
 
 get_network(IP, Subnet) ->
-  IPNum = ip_to_number(IP),
+  IPNum     = ip_to_number(IP),
   SubnetNum = ip_to_number(Subnet),
-  Host = IPNum band SubnetNum,
+  Host      = IPNum band SubnetNum,
   number_to_ip(Host).
 
 
 calculate_network(IP, Subnet) ->
-  SubnetNum = ip_to_number(Subnet),
-  Network = get_network(IP, Subnet),
-  NetworkNum = ip_to_number(Network),
-  NumHosts = round(math:pow(2, (32 - count_bits(SubnetNum)))) - 2,
-  Hosts = get_hosts(NetworkNum, NumHosts),
+  Network      = get_network(IP, Subnet),
+  NetworkNum   = ip_to_number(Network),
+  SubnetNum    = ip_to_number(Subnet),
+  NumHosts     = round(math:pow(2, (32 - count_bits(SubnetNum)))) - 2,
+  Hosts        = get_hosts(NetworkNum, NumHosts),
   BroadcastNum = NetworkNum + NumHosts + 1,
-  Broadcast = number_to_ip(BroadcastNum),
+  Broadcast    = number_to_ip(BroadcastNum),
   {Network, Broadcast, Hosts}.
 
 
@@ -87,7 +87,8 @@ get_hosts(Host, Count) ->
   if
     NewCount < 0 -> [];
     true ->
-      IP = number_to_ip(Host + 1),
-      [IP | get_hosts(Host + 1, NewCount)]
+      N  = Host + 1,
+      IP = number_to_ip(N),
+      [IP | get_hosts(N, NewCount)]
   end.
 
